@@ -16,6 +16,8 @@ import (
 func main() {
 	router := gin.Default()
 
+	db := GetDBConnect()
+
 	bot, err := linebot.New(
 		os.Getenv("LINE_CHANNEL_SECRET"),
 		os.Getenv("LINE_CHANNEL_ACCESS_TOKEN"),
@@ -40,7 +42,17 @@ func main() {
 			if event.Type == linebot.EventTypeMessage {
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
-					if _, err = bot.ReplyMessage(event.ReplyToken, linebot.NewTextMessage(message.Text)).Do(); err != nil {
+					keywords := GoKeyword{}
+					db.Where("keyword = ?", message.Text).First(&keywords)
+
+					r := NewBotResponse(keywords.ResponseCls)
+					if _, err = bot.ReplyMessage(event.ReplyToken, r.Response(message.Text)).Do(); err != nil {
+						log.Print(err)
+					}
+
+				case *linebot.StickerMessage:
+					r := NewBotResponse("RandomSticker")
+					if _, err = bot.ReplyMessage(event.ReplyToken, r.Response("")).Do(); err != nil {
 						log.Print(err)
 					}
 				}
