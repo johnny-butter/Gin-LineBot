@@ -1,0 +1,7 @@
+create_table("go_keywords") {
+  t.Column("id", "integer", {primary: true})
+  t.Column("keyword", "string", {})
+  t.Column("response_cls", "string", {})
+
+  t.Index("keyword", {"unique": true})
+}
