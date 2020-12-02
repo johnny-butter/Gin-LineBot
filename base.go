@@ -1,6 +1,10 @@
 package main
 
-import "github.com/line/line-bot-sdk-go/linebot"
+import (
+	"errors"
+
+	"github.com/line/line-bot-sdk-go/linebot"
+)
 
 type BotResponse interface {
 	Response(string) linebot.SendingMessage
@@ -11,13 +15,13 @@ const (
 	RandomSticker string = "RandomSticker"
 )
 
-func NewBotResponse(t string) BotResponse {
+func NewBotResponse(t string) (BotResponse, error) {
 	switch t {
 	case RandomText:
-		return NewRandomText()
+		return NewRandomText(), nil
 	case RandomSticker:
-		return NewRandomSticker()
+		return NewRandomSticker(), nil
 	default:
-		panic("Unknown response type")
+		return nil, errors.New("unknown response type")
 	}
 }

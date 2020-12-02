@@ -46,22 +46,38 @@ func main() {
 				}{"Events parse error"})
 				return
 			}
-			return
 		}
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
+				var err error
+				var r BotResponse
+
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					keywords := GoKeyword{}
 					db.Where("keyword = ?", message.Text).First(&keywords)
 
-					r := NewBotResponse(keywords.ResponseCls)
+					r, err = NewBotResponse(keywords.ResponseCls)
+					if err != nil {
+						c.JSON(http.StatusBadRequest, struct {
+							Message string `json:"message"`
+						}{Message: err.Error()})
+						return
+					}
+
 					if _, err = bot.ReplyMessage(event.ReplyToken, r.Response(message.Text)).Do(); err != nil {
 						log.Print(err)
 					}
 
 				case *linebot.StickerMessage:
-					r := NewBotResponse("RandomSticker")
+					r, err = NewBotResponse("RandomSticker")
+					if err != nil {
+						c.JSON(http.StatusBadRequest, struct {
+							Message string `json:"message"`
+						}{Message: err.Error()})
+						return
+					}
+
 					if _, err = bot.ReplyMessage(event.ReplyToken, r.Response("")).Do(); err != nil {
 						log.Print(err)
 					}
