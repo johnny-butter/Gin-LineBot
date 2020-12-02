@@ -24,5 +24,5 @@ soda migrate up
 - Start api server
 
 ```shell
-go run main.go models.go base.go randomtext.go randomsticker.go
+go run main.go models.go
 ```
