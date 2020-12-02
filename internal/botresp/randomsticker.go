@@ -1,4 +1,4 @@
-package main
+package botresp
 
 import (
 	"math/rand"

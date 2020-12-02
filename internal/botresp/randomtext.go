@@ -1,4 +1,4 @@
-package main
+package botresp
 
 import "github.com/line/line-bot-sdk-go/linebot"
 
