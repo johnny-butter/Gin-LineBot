@@ -33,8 +33,18 @@ func main() {
 		if err != nil {
 			if err == linebot.ErrInvalidSignature {
 				c.Writer.WriteHeader(400)
+
+				c.JSON(http.StatusBadRequest, struct {
+					Message string `json:"message"`
+				}{"Invalid signature error"})
+				return
 			} else {
 				c.Writer.WriteHeader(500)
+
+				c.JSON(http.StatusInternalServerError, struct {
+					Message string `json:"message"`
+				}{"Events parse error"})
+				return
 			}
 			return
 		}
