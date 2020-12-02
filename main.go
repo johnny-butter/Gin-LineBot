@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"internal/botresp"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,14 +51,14 @@ func main() {
 		for _, event := range events {
 			if event.Type == linebot.EventTypeMessage {
 				var err error
-				var r BotResponse
+				var r botresp.BotResponse
 
 				switch message := event.Message.(type) {
 				case *linebot.TextMessage:
 					keywords := GoKeyword{}
 					db.Where("keyword = ?", message.Text).First(&keywords)
 
-					r, err = NewBotResponse(keywords.ResponseCls)
+					r, err = botresp.NewBotResponse(keywords.ResponseCls)
 					if err != nil {
 						c.JSON(http.StatusBadRequest, struct {
 							Message string `json:"message"`
@@ -70,7 +71,7 @@ func main() {
 					}
 
 				case *linebot.StickerMessage:
-					r, err = NewBotResponse("RandomSticker")
+					r, err = botresp.NewBotResponse("RandomSticker")
 					if err != nil {
 						c.JSON(http.StatusBadRequest, struct {
 							Message string `json:"message"`
