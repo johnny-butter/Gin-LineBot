@@ -18,7 +18,9 @@ WORKDIR /app
 
 COPY --from=builder /builder/heroku-release.sh .
 COPY --from=builder /builder/soda .
-COPY --from=builder /builder/line_bot_app .
+COPY --from=builder /builder/migrations ./migrations
 COPY --from=builder /builder/database.yml.example database.yml
+
+COPY --from=builder /builder/line_bot_app .
 
 CMD ["/bin/bash"]
