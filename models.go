@@ -6,8 +6,8 @@ import (
 	"github.com/gobuffalo/pop"
 )
 
-func GetDBConnect() (db *pop.Connection) {
-	db, err := pop.Connect("development")
+func GetDBConnect(env string) (db *pop.Connection) {
+	db, err := pop.Connect(env)
 	if err != nil {
 		log.Panic(err)
 	}

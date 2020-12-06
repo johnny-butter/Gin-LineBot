@@ -17,7 +17,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	db := GetDBConnect()
+	db := GetDBConnect(os.Getenv("ENV"))
 
 	bot, err := linebot.New(
 		os.Getenv("LINE_CHANNEL_SECRET"),
@@ -89,5 +89,9 @@ func main() {
 		c.String(http.StatusOK, "ok")
 	})
 
-	router.Run(":8080")
+	if p, ok := os.LookupEnv("PORT"); ok {
+		router.Run(":" + p)
+	} else {
+		router.Run(":8080")
+	}
 }

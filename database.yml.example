@@ -6,3 +6,7 @@ development:
   password:
   host:
   pool:
+
+production:
+  url: {{env "DATABASE_URL"}}
+  pool: 5
