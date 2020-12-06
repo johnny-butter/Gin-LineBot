@@ -1,0 +1,15 @@
+setup:
+    addons:
+      - plan: cleardb
+
+build:
+  docker:
+    web: Dockerfile
+
+release:
+  image: web
+  command:
+    - sh heroku-release.sh
+
+run:
+  web: ./line_bot_app

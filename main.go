@@ -89,5 +89,9 @@ func main() {
 		c.String(http.StatusOK, "ok")
 	})
 
-	router.Run(":8080")
+	if p, ok := os.LookupEnv("PORT"); ok {
+		router.Run(":" + p)
+	} else {
+		router.Run(":8080")
+	}
 }
