@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Create db schema
-# ./soda create -a
+# ./soda create -a -e production
 
 # Run migrations
-./soda migrate up
+./soda migrate up -e production
