@@ -17,7 +17,7 @@ import (
 func main() {
 	router := gin.Default()
 
-	db := GetDBConnect()
+	db := GetDBConnect(os.Getenv("ENV"))
 
 	bot, err := linebot.New(
 		os.Getenv("LINE_CHANNEL_SECRET"),
